@@ -12,7 +12,8 @@
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
+            type="text/javascript"></script>
     <script src="../static/js/login.js" type="text/javascript"></script>
     <style type="text/css">
         #validate_code_img {
@@ -24,6 +25,7 @@
 
 </head>
 <body>
+{% csrf_token %}
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-lg-offset-3">
@@ -46,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <input type="button" class="btn btn-default" value="登录"><span class="error"></span>
+            <input id="login" type="button" class="btn btn-default" value="登录"><span class="error"></span>
             <a href="/register/" class="btn btn-success pull-right">注册</a>
 
 
@@ -56,5 +58,5 @@
 </div>
 
 </body>
-<script  src="{% static "js/login.js" %}"></script>
+<script src="{% static "js/login.js" %}"></script>
 </html>

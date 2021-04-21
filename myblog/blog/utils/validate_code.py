@@ -17,7 +17,7 @@ def gen_random_chr():
     return random.choice([random_num, random_low, random_upper])
 
 
-def gen_valid_code():
+def gen_valid_code(request):
     """
             构造验证码数据
             1.设置长宽
@@ -40,8 +40,10 @@ def gen_valid_code():
     valid_code_str = ''
     for i in range(5):
         random_chr = gen_random_chr()
-        draw.text(xy=(i * 50 + 20, 0), text=gen_random_chr(), fill=gen_random_color(), font=my_font)
+        draw.text(xy=(i * 50 + 20, 0), text=random_chr, fill=gen_random_color(), font=my_font)
         valid_code_str += random_chr
+    request.session["valid_code_str"] = valid_code_str
+    print(valid_code_str)
     for j in range(10):
         x1 = random.randint(0, width)
         x2 = random.randint(0, width)

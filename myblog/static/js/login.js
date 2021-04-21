@@ -1,10 +1,38 @@
+//刷新验证码
 $("#validate_code_img").click(function () {
-    let my_src = $(this)[0].src;
-    if (!my_src.endsWith("?")) {
-        $(this)[0].src += '?';
-    } else {
-        $(this)[0].src = "/blog/get_validate_code/";
-    }
-
+    $(this)[0].src += '?';
 });
-console.log(1)
+//发起登录请求
+$("#login").click(function () {
+    $.ajax({
+        type: "post",
+        url: "",
+        data: {
+            user: $("#user").val(),
+            pwd: $("#pwd").val(),
+            validate: $("#validate").val(),
+            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.user) {
+                if (location.search){
+                   location.href=location.search.slice(6)
+                }
+                else{
+                   console.log("跳转");
+                   location.href="/index/"
+                }
+
+                    } else {
+                $(".error").text(data.msg).css({
+                    "color": "red", "margin-left": "10px"
+                });
+               setTimeout(function () {
+                  $(".error").text()
+               },1000)
+            }
+        }
+
+    })
+});
