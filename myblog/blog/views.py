@@ -1,6 +1,8 @@
 from django.contrib import auth
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+
+from blog.utils.my_forms import UserForm
 from blog.utils.validate_code import gen_valid_code
 
 
@@ -25,6 +27,11 @@ def login(request):
             response["msg"] = "验证码错误"
         return JsonResponse(response)
     return render(request, "login.html")
+
+
+def register(request):
+    my_form = UserForm()
+    return render(request, "register.html", {"forms": my_form})
 
 
 def get_valid_code(request):
