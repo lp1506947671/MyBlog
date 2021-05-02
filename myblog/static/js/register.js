@@ -37,7 +37,8 @@ $(".reg_btn").click(function () {
         data: form,
         success: function (data) {
             if (data.user) {
-                location.href = "";
+                alert("register is success");
+                location.href = "/login/";
             } else {
                 $(".error").text("");
                 $(".form-group").removeClass("has-error");
