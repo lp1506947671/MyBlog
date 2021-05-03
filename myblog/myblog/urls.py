@@ -21,8 +21,11 @@ from blog import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.login),
+    path('login/', views.login),
+    path("logout/", views.logout),
+    path('index/', views.index),
     path("register/", views.register),
     path('blog/', include('blog.urls')),
-    re_path('media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+    re_path('media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    path('', views.index),
 ]

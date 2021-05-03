@@ -29,7 +29,8 @@ class Blog(models.Model):
 class Article(models.Model):
     nid = models.AutoField(primary_key=True)
     title = models.CharField(max_length=64, verbose_name="文章标题")
-    create_time = models.CharField(max_length=256, verbose_name="创建时间")
+    desc = models.CharField(max_length=255, verbose_name='文章描述')
+    create_time = models.DateTimeField(max_length=256, verbose_name="创建时间")
     content = models.TextField()
     comment_count = models.IntegerField(default=0)
     up_count = models.IntegerField(default=0)

@@ -1,8 +1,8 @@
 from django.contrib import auth
-from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from blog import models
 from blog.models import UserInfo
 from blog.utils.my_forms import UserForm
 from blog.utils.validate_code import gen_valid_code
@@ -73,3 +73,13 @@ def get_valid_code(request):
     img_data = gen_valid_code(request)
 
     return HttpResponse(img_data)
+
+
+def index(request):
+    article_list = models.Article.objects.all()
+    return render(request, "index.html", {"article_list": article_list})
+
+
+def logout(request):
+    auth.logout(request)  # request.session.flush()
+    return redirect("/login/")
