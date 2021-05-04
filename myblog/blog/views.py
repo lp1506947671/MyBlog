@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.db.models import Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -9,6 +10,9 @@ from blog.utils.validate_code import gen_valid_code
 
 
 # Create your views here.
+def index(request):
+    article_list = models.Article.objects.all()
+    return render(request, "index.html", {"article_list": article_list})
 
 
 def login(request):
@@ -29,6 +33,12 @@ def login(request):
             response["msg"] = "验证码错误"
         return JsonResponse(response)
     return render(request, "login.html")
+
+
+def logout(request):
+    # request.session.flush()
+    auth.logout(request)
+    return redirect("/login/")
 
 
 def register(request):
@@ -69,17 +79,33 @@ def register(request):
     return render(request, "register.html", {"forms": my_form})
 
 
+def home_site(request, username, **kwargs):
+    """
+        1.获取当前用户,及用户博客
+        2.查询当前用户的所有文章列表
+        3.判断kwargs是否有参数:category,tag,archive
+    """
+    user = UserInfo.objects.filter(username=username).first()
+    if not user:
+        return render(request, "not_found.html")
+    blog = user.blog
+    article_list = models.Article.objects.filter(user=user)
+    result = {"username": username, "blog": blog, "article_list": article_list}
+    if kwargs:
+        condition = kwargs.get("condition")
+        param = kwargs.get("param")
+        if condition == 'category':
+            article_list = article_list.filter(category__title=param)
+        elif condition == 'tag':
+            article_list = article_list.filter(tags__title=param)
+        else:
+            year, month = param.split("/")
+            article_list = article_list.filter(create_time__year=year, create_time__month=month)
+        result["article_list"] = article_list
+    return render(request, "home_site.html", result)
+
+
 def get_valid_code(request):
     img_data = gen_valid_code(request)
 
     return HttpResponse(img_data)
-
-
-def index(request):
-    article_list = models.Article.objects.all()
-    return render(request, "index.html", {"article_list": article_list})
-
-
-def logout(request):
-    auth.logout(request)  # request.session.flush()
-    return redirect("/login/")
