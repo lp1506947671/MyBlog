@@ -105,6 +105,15 @@ def home_site(request, username, **kwargs):
     return render(request, "home_site.html", result)
 
 
+def article_detail(request, username, article_id):
+    user = models.UserInfo.objects.filter(username=username).first()
+    blog = user.blog
+    article_obj = models.Article.objects.filter(pk=article_id).first()
+    comment_list = models.Comment.objects.filter(article_id=article_id)
+    result = {"username": user, "blog": blog, "article_obj": article_obj, "comment_list": comment_list}
+    return render(request, "article_detail.html", result)
+
+
 def get_valid_code(request):
     img_data = gen_valid_code(request)
 
