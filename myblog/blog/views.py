@@ -1,5 +1,7 @@
+import json
+
 from django.contrib import auth
-from django.db.models import Count
+from django.db.models import Count, F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -118,3 +120,23 @@ def get_valid_code(request):
     img_data = gen_valid_code(request)
 
     return HttpResponse(img_data)
+
+
+def article_like(request):
+    article_id = request.POST.get("article_id")
+    is_up = json.loads(request.POST.get("is_up"))
+    user_id = request.user.pk
+    response = {"state": True}
+    like = models.ArticlesUpDown.objects.filter(user_id=user_id, article_id=article_id).first()
+    if like:
+        response["state"] = False
+        response['handle'] = like.is_up
+        return JsonResponse(response)
+    models.ArticlesUpDown.objects.create(user_id=user_id, article_id=article_id,is_up=is_up)
+    article_obj = models.Article.objects.filter(nid=article_id)
+    if is_up:
+        article_obj.update(up_count=F("up_count") + 1)
+    else:
+        article_obj.update(down_count=F("down_count") + 1)
+
+    return JsonResponse(response)
