@@ -21,7 +21,7 @@ function likeArticles() {
                     let tip = is_up ? "已经点赞过" : "已经吐槽过";
                     let myFloat = is_up ? "left" : "right";
                     $("#digg_tips").html(tip);
-                    $("#digg_tips").css({float:myFloat})
+                    $("#digg_tips").css({float: myFloat});
                     setTimeout(function () {
                         $("#digg_tips").html('')
                     }, 1000)
@@ -32,5 +32,24 @@ function likeArticles() {
     })
 }
 
+//评论树
+function getCommentTree() {
+
+}
+
+//评论请求
+function sendComment() {
+
+}
+
+//回复按钮
+function answerBtn() {
+
+}
+
+
 //主函数
+getCommentTree();
+sendComment();
+answerBtn();
 likeArticles();

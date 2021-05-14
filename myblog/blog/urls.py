@@ -13,4 +13,8 @@ urlpatterns = [
     # 个人站点
     re_path(r'^(?P<username>\w+)/(?P<condition>tag|category|archive)/(?P<param>.*)/$', views.home_site),
     re_path(r"^(?P<username>\w+)/$", views.home_site),
+    # 评论
+    path("comment/", views.comment),
+    # 获取评论数相关数据
+    path("get_comment_tree/", views.get_comment_tree),
 ]

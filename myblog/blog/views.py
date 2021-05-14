@@ -132,7 +132,7 @@ def article_like(request):
         response["state"] = False
         response['handle'] = like.is_up
         return JsonResponse(response)
-    models.ArticlesUpDown.objects.create(user_id=user_id, article_id=article_id,is_up=is_up)
+    models.ArticlesUpDown.objects.create(user_id=user_id, article_id=article_id, is_up=is_up)
     article_obj = models.Article.objects.filter(nid=article_id)
     if is_up:
         article_obj.update(up_count=F("up_count") + 1)
@@ -140,3 +140,11 @@ def article_like(request):
         article_obj.update(down_count=F("down_count") + 1)
 
     return JsonResponse(response)
+
+
+def comment(request):
+    """"""
+
+
+def get_comment_tree(request):
+    ...
