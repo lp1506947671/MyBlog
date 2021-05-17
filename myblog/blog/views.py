@@ -1,6 +1,9 @@
 import json
+import threading
 
 from django.contrib import auth
+from django.core.mail import send_mail
+from django.db import transaction
 from django.db.models import Count, F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -143,8 +146,36 @@ def article_like(request):
 
 
 def comment(request):
-    """"""
+    # 获取article_id,content,pid,user_id
+    # 获取当前文章id: article_id
+    article_id = request.POST.get("article_id")
+    # 获取当前的评论: content
+    pid = request.POST.get("pid")
+    # 获取当前的评论的父类id: pid
+    content = request.POST.get("content")
+    # 获取当前登录用户
+    user_id = request.user.pk
+    # 获取文章对象
+    article_obj = models.Article.objects.filter(nid=article_id).first()
+    # 事务操作
+    with transaction.atomic():
+        # 创建评论:user_id,article_id,parent_comment_id
+        comment_obj = models.Comment.objects.create(user_id=user_id, article_id=article_id, parent_comment_id=pid,
+                                                    content=content)
+        # 文章的评论数加1
+        models.Article.objects.filter(nid=article_id).update(comment_count=F("comment_count") + 1)
+    # 创建response: create_time, username, content
+    response = {"create_time": comment_obj.create_time.strftime("%Y-%m-%d %X"),
+                "username": request.user.username,
+                "content": content,
+                "comment_id": comment_obj.pk
+                }
+
+    return JsonResponse(response)
 
 
 def get_comment_tree(request):
-    ...
+    article_id = request.GET.get("article_id")
+    response = list(models.Comment.objects.filter(article_id=article_id).order_by("pk").values("pk", "content",
+                                                                                               "parent_comment_id"))
+    return JsonResponse(response, safe=False)

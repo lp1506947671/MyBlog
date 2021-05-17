@@ -34,6 +34,21 @@
                     <div>
                         <a href="">#{{ forloop.counter }}楼</a>
                         <span> {{ comment.create_time|date:"Y-m-d H:i" }}</span>
+                        <a class="pull-right reply_btn" username="{{ comment.user.username }}"
+                               comment_pk="{{ comment.pk }}">回复</a>
+
+                     {% if comment.parent_comment_id %}
+                            <div class="pid_info well">
+                                <p>
+                                    {{ comment.parent_comment.user.username }}: {{ comment.parent_comment.content }}
+                                </p>
+                            </div>
+                        {% endif %}
+
+                        <div class="comment_con">
+                            <p>{{ comment.content }}</p>
+                        </div>
+
                     </div>
                 </li>
             {% endfor %}
