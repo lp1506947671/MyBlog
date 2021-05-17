@@ -15,6 +15,9 @@ from blog.utils.validate_code import gen_valid_code
 
 
 # Create your views here.
+from myblog import settings
+
+
 def index(request):
     article_list = models.Article.objects.all()
     return render(request, "index.html", {"article_list": article_list})
@@ -170,7 +173,13 @@ def comment(request):
                 "content": content,
                 "comment_id": comment_obj.pk
                 }
-
+    # 创建线程: threading, send_mail, 参数(标题, 评论内容, 邮件主机, [邮箱])
+    t = threading.Thread(target=send_mail, args=("您的文章%s新增了一条评论内容" % article_obj.title,
+                                                 content,
+                                                 settings.EMAIL_HOST_USER,
+                                                 ["916852314@qq.com"])
+                         )
+    t.start()
     return JsonResponse(response)
 
 
