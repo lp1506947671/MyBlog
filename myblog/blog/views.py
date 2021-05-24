@@ -2,6 +2,7 @@ import json
 import threading
 
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import Count, F
@@ -12,7 +13,6 @@ from blog import models
 from blog.models import UserInfo
 from blog.utils.my_forms import UserForm
 from blog.utils.validate_code import gen_valid_code
-
 
 # Create your views here.
 from myblog import settings
@@ -188,3 +188,17 @@ def get_comment_tree(request):
     response = list(models.Comment.objects.filter(article_id=article_id).order_by("pk").values("pk", "content",
                                                                                                "parent_comment_id"))
     return JsonResponse(response, safe=False)
+
+
+def cn_backend(request):
+    article_list = models.Article.objects.filter(user=request.user)
+    return render(request, "backend/backend.html", {"article_list": article_list})
+
+
+def upload(request):
+    ...
+
+
+@login_required
+def add_article(request):
+    ...

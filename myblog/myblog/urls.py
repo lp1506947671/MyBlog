@@ -27,5 +27,10 @@ urlpatterns = [
     path("register/", views.register),
     path('blog/', include('blog.urls')),
     re_path('media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    # 文本编辑器上传图片url
+    path('upload/', views.upload),
+    # 后台管理url
+    re_path("cn_backend/", views.cn_backend),
+    re_path("cn_backend/add_articles/", views.add_article),
     path('', views.index),
 ]
