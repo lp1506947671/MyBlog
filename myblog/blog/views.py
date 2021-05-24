@@ -1,6 +1,9 @@
+import datetime
 import json
+import os
 import threading
 
+from bs4 import BeautifulSoup
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -191,14 +194,39 @@ def get_comment_tree(request):
 
 
 def cn_backend(request):
+    """获取后台客户端首页界面"""
     article_list = models.Article.objects.filter(user=request.user)
     return render(request, "backend/backend.html", {"article_list": article_list})
 
 
 def upload(request):
-    ...
+    """编辑器上传文件接受视图函数"""
+    print(request.FILES)
+    img_obj = request.FILES.get("upload_img")
+    print(img_obj.name)
+    path = os.path.join(settings.MEDIA_ROOT, "add_article_img", img_obj.name)
+    with open(path, "wb") as f:
+        for line in img_obj:
+            f.write(line)
+
+    return HttpResponse("ok")
 
 
 @login_required
 def add_article(request):
-    ...
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        # 防止xss攻击,过滤script标签
+        soup = BeautifulSoup(content, "html.parser")
+        for tag in soup.find_all():
+            print(tag.name)
+            if tag.name == "script":
+                tag.decompose()
+        # 构建摘要数据,获取标签字符串的文本前150个符号
+        desc = soup.text[0:150] + "..."
+        models.Article.objects.create(title=title, desc=desc, content=str(soup),
+                                      create_time=datetime.datetime.now(), user=request.user)
+        return redirect("/cn_backend/")
+
+    return render(request, "backend/add_article.html")

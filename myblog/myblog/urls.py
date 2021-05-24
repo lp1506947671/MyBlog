@@ -30,7 +30,7 @@ urlpatterns = [
     # 文本编辑器上传图片url
     path('upload/', views.upload),
     # 后台管理url
-    re_path("cn_backend/", views.cn_backend),
-    re_path("cn_backend/add_articles/", views.add_article),
+    re_path("cn_backend/$", views.cn_backend),
+    re_path("cn_backend/add_article/$", views.add_article),
     path('', views.index),
 ]
