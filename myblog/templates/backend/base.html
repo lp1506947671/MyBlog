@@ -12,17 +12,17 @@
 </head>
 <body>
 
+{# 1.头部 #}
 <div class="header">
     <p class="title">
-        后台管理
-
-        <a class="info" href="/logout/">注销</a>
+        后台管理<a class="info" href="/logout/">注销</a>
         <span class="info"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{ request.user.username }}</span>
     </p>
 </div>
 
 
 <div class="container">
+    {# 2.左边面板 #}
     <div class="col-md-3">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
@@ -43,8 +43,8 @@
 
         </div>
     </div>
+    {# 3.中间标签页 #}
     <div class="col-md-9">
-
         <div>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
@@ -57,33 +57,25 @@
                 <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">相册</a>
                 </li>
             </ul>
-
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="home">
                     {% block content %}
 
                     {% endblock %}
-
-
                 </div>
                 <div role="tabpanel" class="tab-pane" id="profile">
-
                     <img src="/static/blog/img/dogg2.jpg" alt="">
                     <img src="/static/blog/img/dogg3.jpeg" alt="">
                     <img class="pull-right" src="/static/blog/img/dogg4.jpg" alt="">
                 </div>
                 <div role="tabpanel" class="tab-pane" id="messages">
-
                     <img width="180" height="180" src="/static/blog/img/dogg5.jpg" alt="">
                     <img width="180" height="180" src="/static/blog/img/dogg2.jpg" alt="">
-
                 </div>
                 <div role="tabpanel" class="tab-pane" id="settings">
-
                 </div>
             </div>
-
         </div>
 
     </div>
